@@ -15,7 +15,7 @@
 // Pins can be changed, see the GPIO function select table in the datasheet for information on GPIO assignments
 #define UART_RX_PIN 5
 
-#define STRIP_ONE_PIN 0
+#define STRIP_ONE_PIN 1
 
 
 int main()
@@ -32,8 +32,8 @@ int main()
     // In a default system, printf will also output via the default UART
     
     // Send out a string, with CR/LF conversions
-    uart_puts(UART_ID, " Hello, UART!\n");
-    uart_set_irq_enables(UART_ID, true, false);
+    // uart_puts(UART_ID, " Hello, UART!\n");
+    // uart_set_irq_enables(UART_ID, true, false);
     
     // For more examples of UART use see https://github.com/raspberrypi/pico-examples/tree/master/uart
 
@@ -43,13 +43,14 @@ int main()
 
     LEDModule leftLED = LEDModule(pio, sm, offset, STRIP_ONE_PIN, 800000, false, 8);
 
-    LEDModule::LEDState mode = LEDModule::STATIC;
-
-    gpio_init(25);
-    gpio_set_dir(25, GPIO_OUT);
+    LEDModule::LEDState staticMode = LEDModule::STATIC;
+    LEDModule::LEDState blinkMode = LEDModule::BLINKING;
 
     while (true) {
-        leftLED.run(mode);
+        leftLED.run(staticMode, 255, 255, 255);
+        sleep_ms(1000);
+        leftLED.run(staticMode, 0, 255, 255);
+        sleep_ms(1000);
     }
 }
 

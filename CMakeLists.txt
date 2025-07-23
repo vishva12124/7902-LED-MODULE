@@ -46,7 +46,7 @@ pico_set_program_name(7902-LED-MODULE "7902-LED-MODULE")
 pico_set_program_version(7902-LED-MODULE "0.1")
 
 # Generate PIO header
-#pico_generate_pio_header(7902-LED-MODULE ${CMAKE_CURRENT_LIST_DIR}/blink.pio)
+pico_generate_pio_header(7902-LED-MODULE ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio)
 
 # Modify the below lines to enable/disable output over UART/USB
 pico_enable_stdio_uart(7902-LED-MODULE 0)

@@ -19,7 +19,7 @@ class LEDModule {
             PATTERN
         };
 
-        LEDModule(PIO pio, int sm, uint offset, int pin, float freq, bool isRGBW, int NUM_PIXELS);
+        LEDModule(PIO pio, uint sm, uint offset, int pin, float freq, bool isRGBW, int NUM_PIXELS);
 
         void run(LEDState mode);
 
@@ -42,7 +42,7 @@ class LEDModule {
         
         void setColour(LEDValues rgb[]);
 
-        void setColour(uint r, uint g, uint b);
+        void setColour(uint8_t r, uint8_t g, uint8_t b);
 
         inline void put_pixel(uint32_t pixel_grb);
 
