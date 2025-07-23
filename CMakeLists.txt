@@ -35,11 +35,10 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-include_directories(LEDModule)
+include_directories(effects)
 
 add_executable(7902-LED-MODULE 
-7902-LED-MODULE.cpp
-LEDModule/LEDModule.cpp)
+7902-LED-MODULE.cpp)
 
 
 pico_set_program_name(7902-LED-MODULE "7902-LED-MODULE")
