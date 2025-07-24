@@ -3,21 +3,21 @@
 
 #include "PatternBase.hpp"
 #include "LED.hpp"
+#include "WaitCommand.hpp"
 
 class FlashingPattern : public PatternBase {
-    public: 
-        explicit FlashingPattern(LED& led, uint8_t r, uint8_t g, uint8_t b);
+public:
+    FlashingPattern(LED& led, uint8_t r, uint8_t g, uint8_t b);
+    void init() override;
+    void periodic() override;
+    bool isFinished() override;
+    void end() override;
 
-        void init();
-        void periodic();
-        bool isFinished();
-        void end();
-    
-    private:
-        LED led;
-        const uint8_t r;
-        const uint8_t g;
-        const uint8_t b;    
+private:
+    LED& led;
+    uint8_t r, g, b;
+    bool isBlank;
+    WaitCommand wait;
 };
 
 #endif

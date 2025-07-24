@@ -21,8 +21,8 @@ using namespace std;
 // Pins can be changed, see the GPIO function select table in the datasheet for information on GPIO assignments
 #define UART_RX_PIN 5
 
-#define STRIP_ONE_PIN 1
-#define STRIP_TWO_PIN 2
+#define STRIP_ONE_PIN 2
+#define STRIP_TWO_PIN 3
 
 #define STRIP_ONE_LEDS 8
 #define STRIP_TWO_LEDS 20
@@ -37,20 +37,24 @@ void run(LED led) {
     }
 
     while (true) {
-        for (auto it = patternsToRun.begin(); it != patternsToRun.end(); ) {
-                   led.testLED();
-            PatternBase* pattern = *it;
-            pattern->periodic();
-            if (pattern->isFinished()) {
-                it = patternsToRun.erase(it);
-                patternsToRun.erase(it);
-            } else {
-                ++it;
+        // for (auto it = patternsToRun.begin(); it != patternsToRun.end(); ) {
+        //            led.testLED();
+        //     PatternBase* pattern = *it;
+        //     pattern->periodic();
+        //     if (pattern->isFinished()) {
+        //         it = patternsToRun.erase(it);
+        //         patternsToRun.erase(it);
+        //     } else {
+        //         ++it;
+        //     }
+        // }
+            for (PatternBase* pattern : patternsToRun) {
+                pattern->periodic();
             }
-        }
     } 
 }
 int main() {
+
     stdio_init_all();
 
     PIO pio = pio0;

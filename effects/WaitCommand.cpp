@@ -9,9 +9,8 @@
 absolute_time_t  currentTime;
 bool endCommand = false;
 
-WaitCommand::WaitCommand(double ms):
-    ms(ms) {}
-
+WaitCommand::WaitCommand(double ms)
+    : waitTimeUs(ms * 1000), finished(false) {}
     
 void WaitCommand::init() {
     currentTime = get_absolute_time();
@@ -19,7 +18,7 @@ void WaitCommand::init() {
 
 void WaitCommand::periodic() {
     int64_t timeDiff = absolute_time_diff_us(currentTime, get_absolute_time());
-    if (timeDiff >= ms) {
+     if (timeDiff >= waitTimeUs) {
         endCommand = true;
     }
 }

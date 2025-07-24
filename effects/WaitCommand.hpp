@@ -15,8 +15,9 @@ class WaitCommand : public PatternBase {
         void reset();
 
     private:
-        const double ms;     
-
+        double waitTimeUs;
+        absolute_time_t startTime;
+        bool finished;     
 };
 
 #endif
