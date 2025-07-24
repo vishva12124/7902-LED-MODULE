@@ -4,12 +4,19 @@
 #include "drivers/ws2812.pio.h"
 #include "LED.hpp" 
 
+
 LED::LED(PIO pio, uint sm, uint offset, int pin, float freq, bool isRGBW, int NUM_PIXELS) :
     NUM_PIXELS(NUM_PIXELS),
     pio(pio),
     sm(sm) {
     ws2812_program_init(pio, sm, offset, pin, freq, isRGBW);
     incrementor = 0;
+    gpio_init(25);
+    gpio_set_dir(25, GPIO_OUT);
+}
+
+void LED::testLED() {
+    gpio_put(25, true);
 }
 
 void LED::setLED(uint8_t r, uint8_t g, uint8_t b) {

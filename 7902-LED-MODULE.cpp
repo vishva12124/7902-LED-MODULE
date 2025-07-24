@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <vector>
 #include "pico/stdlib.h"
 #include "hardware/pio.h"
 #include "hardware/uart.h"
@@ -27,9 +28,9 @@
 
 bool irq_triggered;
 
-template<typename... Patterns>
-void run(Patterns*... patterns) {
-    PatternBase* patternsToRun[] = { patterns... };
+std::vector<PatternBase*> patternsToRun;
+
+void run(std::vector<PatternBase*> patternsToRun) {
     while (!irq_triggered) {
         for (PatternBase* pattern : patternsToRun) {
             pattern->periodic();
@@ -37,8 +38,7 @@ void run(Patterns*... patterns) {
     } 
 }
 
-int main()
-{
+int main() {
     stdio_init_all();
 
     PIO pio = pio0;
@@ -49,7 +49,9 @@ int main()
     LED leftLED(pio, sm1, offset, STRIP_ONE_PIN, 800000, false, STRIP_ONE_LEDS);
     LED rightLED(pio, sm2, offset, STRIP_TWO_PIN, 800000, false, STRIP_TWO_LEDS);
 
-    run(new StaticPattern(leftLED, 255, 255, 255));
+    patternsToRun.push_back(new StaticPattern(leftLED, 255, 255, 255));
+
+    run(patternsToRun);
 
 }
 
