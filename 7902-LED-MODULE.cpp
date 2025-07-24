@@ -8,6 +8,7 @@
 #include "StaticPattern.hpp"
 #include "WaitCommand.hpp"
 #include "drivers/ws2812.pio.h"
+using namespace std;
 
 
 
@@ -26,18 +27,29 @@
 #define STRIP_ONE_LEDS 8
 #define STRIP_TWO_LEDS 20
 
-bool irq_triggered;
+bool irq_triggered = false;
 
-std::vector<PatternBase*> patternsToRun;
+vector<PatternBase*> patternsToRun;
 
-void run(std::vector<PatternBase*> patternsToRun) {
-    while (!irq_triggered) {
-        for (PatternBase* pattern : patternsToRun) {
+void run(LED led) {
+    for (PatternBase* pattern: patternsToRun) {
+        pattern->init();
+    }
+
+    while (true) {
+        for (auto it = patternsToRun.begin(); it != patternsToRun.end(); ) {
+                   led.testLED();
+            PatternBase* pattern = *it;
             pattern->periodic();
+            if (pattern->isFinished()) {
+                it = patternsToRun.erase(it);
+                patternsToRun.erase(it);
+            } else {
+                ++it;
+            }
         }
     } 
 }
-
 int main() {
     stdio_init_all();
 
@@ -49,9 +61,9 @@ int main() {
     LED leftLED(pio, sm1, offset, STRIP_ONE_PIN, 800000, false, STRIP_ONE_LEDS);
     LED rightLED(pio, sm2, offset, STRIP_TWO_PIN, 800000, false, STRIP_TWO_LEDS);
 
-    patternsToRun.push_back(new StaticPattern(leftLED, 255, 255, 255));
+    patternsToRun.push_back(new FlashingPattern(leftLED, 255, 255, 255));
 
-    run(patternsToRun);
+    run(leftLED);
 
 }
 

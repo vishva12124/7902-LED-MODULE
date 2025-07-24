@@ -1,4 +1,3 @@
-
 #include "StaticPattern.hpp"
 #include "LED.hpp"
 

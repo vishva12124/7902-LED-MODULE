@@ -6,7 +6,7 @@
 
 class FlashingPattern : public PatternBase {
     public: 
-        explicit FlashingPattern(LED led, uint8_t r, uint8_t g, uint8_t b);
+        explicit FlashingPattern(LED& led, uint8_t r, uint8_t g, uint8_t b);
 
         void init();
         void periodic();
@@ -14,7 +14,7 @@ class FlashingPattern : public PatternBase {
         void end();
     
     private:
-        const LED led;
+        LED led;
         const uint8_t r;
         const uint8_t g;
         const uint8_t b;    
