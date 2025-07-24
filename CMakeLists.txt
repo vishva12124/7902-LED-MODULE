@@ -38,7 +38,13 @@ pico_sdk_init()
 include_directories(effects)
 
 add_executable(7902-LED-MODULE 
-7902-LED-MODULE.cpp)
+7902-LED-MODULE.cpp
+LED.cpp
+effects/WaitCommand.cpp
+effects/FlashingPattern.cpp
+effects/PatternBase.cpp
+effects/StaticPattern.cpp
+)
 
 
 pico_set_program_name(7902-LED-MODULE "7902-LED-MODULE")

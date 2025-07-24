@@ -25,6 +25,18 @@
 #define STRIP_ONE_LEDS 8
 #define STRIP_TWO_LEDS 20
 
+bool irq_triggered;
+
+template<typename... Patterns>
+void run(Patterns*... patterns) {
+    PatternBase* patternsToRun[] = { patterns... };
+    while (!irq_triggered) {
+        for (PatternBase* pattern : patternsToRun) {
+            pattern->periodic();
+        }
+    } 
+}
+
 int main()
 {
     stdio_init_all();
@@ -37,9 +49,9 @@ int main()
     LED leftLED(pio, sm1, offset, STRIP_ONE_PIN, 800000, false, STRIP_ONE_LEDS);
     LED rightLED(pio, sm2, offset, STRIP_TWO_PIN, 800000, false, STRIP_TWO_LEDS);
 
+    run(new StaticPattern(leftLED, 255, 255, 255));
+
 }
 
-void run(PatternBase* patterns...) {
-    
-}
+
 

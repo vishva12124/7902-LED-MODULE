@@ -6,7 +6,7 @@
 
 class WaitCommand : public PatternBase {
     public: 
-        explicit WaitCommand(LED led);
+        explicit WaitCommand(LED led, double ms);
 
         void init();
         void periodic();
@@ -14,7 +14,8 @@ class WaitCommand : public PatternBase {
         void end();
 
     private:
-        LED led;     
+        const LED led;
+        const double ms;     
 
 };
 

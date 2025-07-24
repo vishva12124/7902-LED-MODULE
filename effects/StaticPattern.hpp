@@ -6,7 +6,7 @@
 
 class StaticPattern : public PatternBase {
     public: 
-        explicit StaticPattern(LED led);
+        explicit StaticPattern(LED& led, uint8_t r, uint8_t g, uint8_t b);
 
         void init();
         void periodic();
@@ -14,9 +14,10 @@ class StaticPattern : public PatternBase {
         void end();
 
     private:
-        LED led;    
-
-
+        LED& led;
+        const uint8_t r;
+        const uint8_t g;
+        const uint8_t b;    
 };
 
 #endif
