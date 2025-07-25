@@ -5,6 +5,7 @@
 #include "hardware/uart.h"
 #include "PatternBase.hpp"
 #include "FlashingPattern.hpp"
+#include "FadingPattern.hpp"
 #include "StaticPattern.hpp"
 #include "WaitCommand.hpp"
 #include "drivers/ws2812.pio.h"
@@ -22,7 +23,7 @@ using namespace std;
 #define UART_RX_PIN 5
 
 #define STRIP_ONE_PIN 2
-#define STRIP_TWO_PIN 3
+#define STRIP_TWO_PIN 28
 
 #define STRIP_ONE_LEDS 8
 #define STRIP_TWO_LEDS 20
@@ -57,8 +58,6 @@ int main() {
 
     stdio_init_all();
 
-    printf("Hello from Raspberry Pi Pico!\n");
-
     PIO pio = pio0;
     int sm1 = 0;
     int sm2 = 1;
@@ -68,6 +67,8 @@ int main() {
     LED rightLED(pio, sm2, offset, STRIP_TWO_PIN, 800000, false, STRIP_TWO_LEDS);
 
     patternsToRun.push_back(new FlashingPattern(leftLED, 255, 255, 255));
+    patternsToRun.push_back(new FadingPattern(rightLED, 255, 255, 255));
+
 
     run(leftLED);
 

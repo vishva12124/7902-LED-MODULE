@@ -17,7 +17,6 @@ void FlashingPattern::periodic() {
 
     if (timerDone) {
         if (isBlank) {
-            printf("\n", "HAWK", "\n\n", "%s");
             led.setLED(r, g, b);
         } else {
             led.setLED(0, 0, 0);
