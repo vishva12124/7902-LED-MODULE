@@ -1,9 +1,10 @@
 #include "FlashingPattern.hpp"
+#include "stdio.h"
 
 FlashingPattern::FlashingPattern(LED& led, uint8_t r, uint8_t g, uint8_t b)
     : led(led), r(r), g(g), b(b), wait(500) {
-    } 
-
+    }  
+    
 void FlashingPattern::init() {
     wait.reset();
     led.setLED(r, g, b);
@@ -12,8 +13,11 @@ void FlashingPattern::init() {
 void FlashingPattern::periodic() {
     wait.periodic();
 
-    if (wait.isFinished()) {
+    bool timerDone = wait.isFinished();
+
+    if (timerDone) {
         if (isBlank) {
+            printf("\n", "HAWK", "\n\n", "%s");
             led.setLED(r, g, b);
         } else {
             led.setLED(0, 0, 0);

@@ -1,35 +1,32 @@
 #include "WaitCommand.hpp"
-#include "LED.hpp"
-#include <stdio.h>
-#include <vector>
-#include "pico/stdlib.h"
-#include "hardware/pio.h"
-#include "hardware/uart.h"
 
-absolute_time_t  currentTime;
-bool endCommand = false;
+WaitCommand::WaitCommand(int64_t ms)
+    : waitTimeUs(ms), finished(false) {}
 
-WaitCommand::WaitCommand(double ms)
-    : waitTimeUs(ms * 1000), finished(false) {}
-    
 void WaitCommand::init() {
-    currentTime = get_absolute_time();
+    startTime = time_us_64() / 1000;
+    finished = false;
 }
 
 void WaitCommand::periodic() {
-    int64_t timeDiff = absolute_time_diff_us(currentTime, get_absolute_time());
-     if (timeDiff >= waitTimeUs) {
-        endCommand = true;
+    int64_t elapsed = (time_us_64() / 1000) - startTime;
+
+    bool timePassed = elapsed >= waitTimeUs;
+
+    if (timePassed) {
+        finished = true;
     }
 }
 
 void WaitCommand::reset() {
-    currentTime = get_absolute_time();
-    endCommand = false;
+    startTime = time_us_64() / 1000;
+    finished = false;
 }
 
 bool WaitCommand::isFinished() {
-    return endCommand;
+    return finished;
 }
-void WaitCommand::end() {}  
 
+void WaitCommand::end() {
+    finished = true;
+}

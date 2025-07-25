@@ -6,7 +6,7 @@
 
 class WaitCommand : public PatternBase {
     public: 
-        explicit WaitCommand(double ms);
+        explicit WaitCommand(int64_t ms);
 
         void init();
         void periodic();
@@ -15,7 +15,7 @@ class WaitCommand : public PatternBase {
         void reset();
 
     private:
-        double waitTimeUs;
+        int64_t waitTimeUs;
         absolute_time_t startTime;
         bool finished;     
 };

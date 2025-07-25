@@ -54,12 +54,18 @@ pico_set_program_version(7902-LED-MODULE "0.1")
 pico_generate_pio_header(7902-LED-MODULE ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio)
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(7902-LED-MODULE 0)
-pico_enable_stdio_usb(7902-LED-MODULE 1)
+pico_enable_stdio_uart(7902-LED-MODULE 1)
+pico_enable_stdio_usb(7902-LED-MODULE 0)
 
 # Add the standard library to the build
 target_link_libraries(7902-LED-MODULE
         pico_stdlib)
+
+#set(PICO_DEFAULT_BINARY_TYPE no_flash)
+
+set(CMAKE_BUILD_TYPE "Debug")
+#set(CMAKE_C_FLAGS_DEBUG "-g -O0")
+#set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 
 # Add the standard include files to the build
 target_include_directories(7902-LED-MODULE PRIVATE

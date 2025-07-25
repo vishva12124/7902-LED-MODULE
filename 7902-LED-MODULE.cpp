@@ -57,6 +57,8 @@ int main() {
 
     stdio_init_all();
 
+    printf("Hello from Raspberry Pi Pico!\n");
+
     PIO pio = pio0;
     int sm1 = 0;
     int sm2 = 1;
