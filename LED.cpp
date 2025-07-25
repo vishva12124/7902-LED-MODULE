@@ -10,9 +10,12 @@ LED::LED(PIO pio, uint sm, uint offset, int pin, float freq, bool isRGBW, int NU
     pio(pio),
     sm(sm) {
     ws2812_program_init(pio, sm, offset, pin, freq, isRGBW);
-    incrementor = 0;
     gpio_init(25);
     gpio_set_dir(25, GPIO_OUT);
+}
+
+int LED::getNumOfLEDS() {
+    return NUM_PIXELS;
 }
 
 void LED::testLED() {
@@ -21,11 +24,18 @@ void LED::testLED() {
 
 void LED::setLED(uint8_t r, uint8_t g, uint8_t b) {
     sleep_ms(1);
-    for (; incrementor != NUM_PIXELS; incrementor++) {
+    for (int i = 0; i != NUM_PIXELS; i++) {
         uint32_t colour_set = urgb_u32(r, g, b);
         put_pixel(colour_set);
     }
-    incrementor = 0;
+}
+
+void LED::setLED(RGB rgb[]) {
+    sleep_ms(1);
+    for (int i = 0; i != NUM_PIXELS; i++) {
+        uint32_t colour_set = urgb_u32(rgb[i].r, rgb[i].g, rgb[i].b);
+        put_pixel(colour_set);
+    }
 }
 
 inline void LED::put_pixel(uint32_t pixel_grb) {

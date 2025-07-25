@@ -45,6 +45,8 @@ effects/FlashingPattern.cpp
 effects/PatternBase.cpp
 effects/StaticPattern.cpp
 effects/FadingPattern.cpp
+effects/RainbowPattern.cpp
+effects/MovingPattern.cpp
 )
 
 

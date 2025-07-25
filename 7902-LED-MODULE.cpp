@@ -7,11 +7,11 @@
 #include "FlashingPattern.hpp"
 #include "FadingPattern.hpp"
 #include "StaticPattern.hpp"
+#include "RainbowPattern.hpp"
+#include "MovingPattern.hpp"
 #include "WaitCommand.hpp"
 #include "drivers/ws2812.pio.h"
 using namespace std;
-
-
 
 // UART defines
 // By default the stdout UART is `uart0`, so we will use the second one
@@ -62,6 +62,7 @@ void run(LED led) {
             }
     } 
 }
+
 int main() {
 
     stdio_init_all();
@@ -74,13 +75,11 @@ int main() {
     LED leftLED(pio, sm1, offset, STRIP_ONE_PIN, 800000, false, STRIP_ONE_LEDS);
     LED rightLED(pio, sm2, offset, STRIP_TWO_PIN, 800000, false, STRIP_TWO_LEDS);
 
-    patternsToRun.push_back(new StaticPattern(leftLED, 255, 255, 255));
+    patternsToRun.push_back(new FadingPattern(leftLED, 255, 255, 255));
     // patternsToRun.push_back(new WaitCommand(100));
     patternsToRun.push_back(new FadingPattern(rightLED, 255, 255, 255));
 
-
     run(leftLED);
-
 }
 
 

@@ -1,0 +1,24 @@
+#ifndef RAINBOWPATTERN_HPP
+#define RAINBOWPATTERN_HPP
+
+#include "PatternBase.hpp"
+#include "LED.hpp"
+#include "WaitCommand.hpp"
+
+class RainbowPattern : public PatternBase {
+public:
+    RainbowPattern(LED& led);
+    void init() override;
+    void periodic() override;
+    bool isFinished() override;
+    void end() override;
+
+private:
+    LED& led;
+    uint8_t r, g, b;
+    WaitCommand wait;
+    int brightness = 0;
+    int fadeInterval = 1;
+};
+
+#endif
