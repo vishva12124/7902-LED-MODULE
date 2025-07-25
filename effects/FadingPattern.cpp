@@ -16,10 +16,16 @@ void FadingPattern::periodic() {
     bool timerDone = wait.isFinished();
 
     if (timerDone) {
-        r--;
-        g--;
-        b--;
-        led.setLED(r, g, b);
+        uint8_t scaledR = (r * brightness) / 255;
+        uint8_t scaledG = (g * brightness) / 255;
+        uint8_t scaledB = (b * brightness) / 255;
+        brightness += fadeInterval;
+
+        led.setLED(scaledR, scaledG, scaledB);
+
+        if (brightness <= 0 || brightness >= 255) {
+            fadeInterval = -fadeInterval;
+        }
         wait.reset();
     }
 }

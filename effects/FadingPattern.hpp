@@ -15,9 +15,10 @@ public:
 
 private:
     LED& led;
-    uint8_t r, g, b;
-    bool isBlank = false;
+    const uint8_t r, g, b;
     WaitCommand wait;
+    int brightness = 0;
+    int fadeInterval = 1;
 };
 
 #endif
