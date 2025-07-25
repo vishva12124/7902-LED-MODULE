@@ -30,7 +30,7 @@ using namespace std;
 
 bool irq_triggered = false;
 
-static int vectorSize = 0;
+static int vectorSize = 0; //debugging purposes
 
 vector<PatternBase*> patternsToRun;
 
@@ -54,9 +54,10 @@ void run(LED led) {
             int i = 0;
             for (PatternBase* pattern : patternsToRun) {
                 pattern->periodic();
-                vectorSize = patternsToRun.size();
+                vectorSize = patternsToRun.size(); //debugging purposes
                 if (pattern->isFinished()) {
                     patternsToRun.erase(patternsToRun.begin() + (i - 1));
+                    delete pattern;
                 }
             }
     } 
@@ -73,7 +74,7 @@ int main() {
     LED leftLED(pio, sm1, offset, STRIP_ONE_PIN, 800000, false, STRIP_ONE_LEDS);
     LED rightLED(pio, sm2, offset, STRIP_TWO_PIN, 800000, false, STRIP_TWO_LEDS);
 
-    patternsToRun.push_back(new FlashingPattern(leftLED, 255, 255, 255));
+    patternsToRun.push_back(new StaticPattern(leftLED, 255, 255, 255));
     // patternsToRun.push_back(new WaitCommand(100));
     patternsToRun.push_back(new FadingPattern(rightLED, 255, 255, 255));
 
