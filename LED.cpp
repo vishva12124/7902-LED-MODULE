@@ -5,10 +5,13 @@
 #include "LED.hpp" 
 
 
-LED::LED(PIO pio, uint sm, uint offset, int pin, float freq, bool isRGBW, int NUM_PIXELS) :
+LED::LED(PIO pio, uint sm, int pin, float freq, bool isRGBW, int NUM_PIXELS) :                                                                                                                                                                      
     NUM_PIXELS(NUM_PIXELS),
     pio(pio),
     sm(sm) {
+    uint offset = pio_add_program(pio, &ws2812_program);
+    // pio_claim_free_sm_and_add_program_for_gpio_range(&ws2812_program, &pio, &sm, &offset, pin, 1, true);
+    // hard_assert(success);
     ws2812_program_init(pio, sm, offset, pin, freq, isRGBW);
     gpio_init(25);
     gpio_set_dir(25, GPIO_OUT);
@@ -28,6 +31,27 @@ void LED::setLED(uint8_t r, uint8_t g, uint8_t b) {
         uint32_t colour_set = urgb_u32(r, g, b);
         put_pixel(colour_set);
     }
+}
+
+void LED::setLED(int index, uint8_t r, uint8_t g, uint8_t b) {
+    sleep_ms(1);
+    RGB rgb[NUM_PIXELS];
+
+    for (int i = 0; i != NUM_PIXELS; i++) {
+        if (i == index) {
+            rgb[i].r = r;
+            rgb[i].g = g;
+            rgb[i].b = b;
+        }
+        
+        else {
+            rgb[i].r = 0;
+            rgb[i].g = 0;
+            rgb[i].b = 0;
+        }
+    }
+
+    setLED(rgb);
 }
 
 void LED::setLED(RGB rgb[]) {

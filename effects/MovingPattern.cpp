@@ -1,19 +1,19 @@
 #include "MovingPattern.hpp"
 #include "stdio.h"
 
-//WORK IN PROGRESS (NON-FUNCTIONAL)
-
-uint8_t x = 0, i = 1;
-bool direction = true;
+int counter = 0;
+int incrementor = 1;
 
 MovingPattern::MovingPattern(LED& led, uint8_t r, uint8_t g, uint8_t b)
-    : led(led), r(r), g(g), b(b), wait(3000), ledCount(led.getNumOfLEDS()) {
-        rgb[ledCount];
-}  
+    : led(led), r(r), g(g), b(b), wait(50), ledCount(led.getNumOfLEDS()) {
+    }  
     
 void MovingPattern::init() {
     wait.reset();
+    led.testLED();
     led.setLED(0, 0, 0);
+    counter = 0;
+    incrementor = 1;
 }
 
 void MovingPattern::periodic() {
@@ -22,42 +22,17 @@ void MovingPattern::periodic() {
     bool timerDone = wait.isFinished();
 
     if (timerDone) {
-        if (i == ledCount) {
-            direction = false;
-            x = ledCount + 1;
-        }
-        
-        else if (i == 0 && direction == false) {
-            direction = true;
-            x = -1;
-        }
+        led.setLED(counter, r, g, b);
+        counter += incrementor;
 
-        switch (direction) {
-            case 0:
-                i--;
-                x--;
-                break;
-            case 1:
-                i++;
-                x++;
-                break;
+        if (counter >= ledCount - 1 || counter <= 0) {
+            incrementor = -incrementor;
         }
-        rgb[i].r = r;
-        rgb[i].g = g;
-        rgb[i].b = b;
-
-        led.setLED(rgb);
-        
-        rgb[x].r = 0;
-        rgb[x].g = 0;
-        rgb[x].b = 0;
-        
-        led.setLED(rgb);
+        wait.reset();
     }
 
-    wait.reset();
+    // led.setLED(5, r, g, b);
 }
-
 
 bool MovingPattern::isFinished() {
     return false;

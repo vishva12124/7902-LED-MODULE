@@ -40,17 +40,6 @@ void run(LED led) {
     }
 
     while (true) {
-        // for (auto it = patternsToRun.begin(); it != patternsToRun.end(); ) {
-        //            led.testLED();
-        //     PatternBase* pattern = *it;
-        //     pattern->periodic();
-        //     if (pattern->isFinished()) {
-        //         it = patternsToRun.erase(it);
-        //         patternsToRun.erase(it);
-        //     } else {
-        //         ++it;
-        //     }
-        // }
             int i = 0;
             for (PatternBase* pattern : patternsToRun) {
                 pattern->periodic();
@@ -70,14 +59,13 @@ int main() {
     PIO pio = pio0;
     int sm1 = 0;
     int sm2 = 1;
-    uint offset = pio_add_program(pio, &ws2812_program);
 
-    LED leftLED(pio, sm1, offset, STRIP_ONE_PIN, 800000, false, STRIP_ONE_LEDS);
-    LED rightLED(pio, sm2, offset, STRIP_TWO_PIN, 800000, false, STRIP_TWO_LEDS);
+    LED leftLED(pio, sm1, STRIP_ONE_PIN, 800000, false, STRIP_ONE_LEDS);
+    LED rightLED(pio, sm2, STRIP_TWO_PIN, 800000, false, STRIP_TWO_LEDS);
 
-    patternsToRun.push_back(new FadingPattern(leftLED, 255, 255, 255));
+    patternsToRun.push_back(new MovingPattern(leftLED, 0, 0, 255));
     // patternsToRun.push_back(new WaitCommand(100));
-    patternsToRun.push_back(new FadingPattern(rightLED, 255, 255, 255));
+    patternsToRun.push_back(new FlashingPattern(rightLED, 255, 255, 255));
 
     run(leftLED);
 }

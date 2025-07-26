@@ -6,7 +6,7 @@
 
 class LED {
     public: 
-        LED(PIO pio, uint sm, uint offset, int pin, float freq, bool isRGBW, int NUM_PIXELS);
+        LED(PIO pio, uint sm, int pin, float freq, bool isRGBW, int NUM_PIXELS);
         
         struct RGB {
             uint8_t r;
@@ -15,6 +15,7 @@ class LED {
         };
 
         void setLED(uint8_t r, uint8_t g, uint8_t b);
+        void setLED(int index, uint8_t r, uint8_t g, uint8_t b);
         void setLED(RGB rgb[]);
         void testLED();
         int getNumOfLEDS();

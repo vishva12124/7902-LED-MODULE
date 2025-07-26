@@ -35,6 +35,8 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
+add_compile_definitions(PICO_STDIO_USB_ENABLE_RESET_VIA_VENDOR_INTERFACE=1)
+
 include_directories(effects)
 
 add_executable(7902-LED-MODULE 
@@ -57,8 +59,8 @@ pico_set_program_version(7902-LED-MODULE "0.1")
 pico_generate_pio_header(7902-LED-MODULE ${CMAKE_CURRENT_LIST_DIR}/ws2812.pio)
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(7902-LED-MODULE 1)
-pico_enable_stdio_usb(7902-LED-MODULE 0)
+pico_enable_stdio_uart(7902-LED-MODULE 0)
+pico_enable_stdio_usb(7902-LED-MODULE 1)
 
 # Add the standard library to the build
 target_link_libraries(7902-LED-MODULE
