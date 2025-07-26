@@ -16,11 +16,11 @@ public:
 private:
     LED& led;
     const int ledCount;
-    LED::RGB rgb[0];
     const uint8_t r, g, b;
     WaitCommand wait;
     int brightness = 0;
-    int fadeInterval = 1;
+    int counter = 0;
+    int incrementor = 1;
 };
 
 #endif

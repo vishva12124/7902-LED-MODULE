@@ -15,7 +15,7 @@ public:
 
 private:
     LED& led;
-    uint8_t r, g, b;
+    const uint8_t r, g, b;
     bool isBlank = false;
     WaitCommand wait;
 };

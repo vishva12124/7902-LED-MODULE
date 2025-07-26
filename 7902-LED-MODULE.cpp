@@ -48,6 +48,7 @@ void run(LED led) {
                     patternsToRun.erase(patternsToRun.begin() + (i - 1));
                     delete pattern;
                 }
+                i++;
             }
     } 
 }
@@ -57,15 +58,15 @@ int main() {
     stdio_init_all();
 
     PIO pio = pio0;
-    int sm1 = 0;
-    int sm2 = 1;
+    uint sm1 = 0;
+    uint sm2 = 1;
 
     LED leftLED(pio, sm1, STRIP_ONE_PIN, 800000, false, STRIP_ONE_LEDS);
     LED rightLED(pio, sm2, STRIP_TWO_PIN, 800000, false, STRIP_TWO_LEDS);
 
-    patternsToRun.push_back(new MovingPattern(leftLED, 0, 0, 255));
+    patternsToRun.push_back(new StaticPattern(leftLED, 0, 0, 255));
     // patternsToRun.push_back(new WaitCommand(100));
-    patternsToRun.push_back(new FlashingPattern(rightLED, 255, 255, 255));
+    patternsToRun.push_back(new MovingPattern(rightLED, 255, 255, 255));
 
     run(leftLED);
 }
