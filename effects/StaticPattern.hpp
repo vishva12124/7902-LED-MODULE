@@ -8,6 +8,7 @@ class StaticPattern : public PatternBase {
     public: 
         explicit StaticPattern(LED& led, uint8_t r, uint8_t g, uint8_t b);
 
+        LED& getLED();
         void init();
         void periodic();
         bool isFinished();

@@ -40,7 +40,7 @@ add_compile_definitions(PICO_STDIO_USB_ENABLE_RESET_VIA_VENDOR_INTERFACE=1)
 include_directories(effects)
 
 add_executable(7902-LED-MODULE 
-7902-LED-MODULE.cpp
+LEDModule.cpp
 LED.cpp
 effects/WaitCommand.cpp
 effects/FlashingPattern.cpp

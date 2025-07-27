@@ -1,5 +1,6 @@
 #ifndef PATTERNBASE_HPP
 #define PATTERNBASE_HPP
+
 class PatternBase {
   
     public:

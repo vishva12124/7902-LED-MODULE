@@ -13,7 +13,7 @@ class LED {
             uint8_t g;
             uint8_t b;
         };
-
+        
         void setLED(uint8_t r, uint8_t g, uint8_t b);
         void setLED(int index, uint8_t r, uint8_t g, uint8_t b);
         void setLED(RGB rgb[]);
