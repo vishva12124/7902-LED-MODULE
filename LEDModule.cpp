@@ -58,6 +58,8 @@ void run() {
         pattern->init();
     }
 
+    // leftLED.testLED();
+
     while (!irq_triggered) {
         int i = 0;
         for (PatternBase* pattern : patternsToRun) {
@@ -110,15 +112,23 @@ void getUserInput() {
 
     delete patternsToRun[stripNumber];
 
+    FadingPattern *fadingPattern = new FadingPattern(*selectedLED, r, g, b);
+    MovingPattern *movingPattern = new MovingPattern(*selectedLED, r, g, b);
+
     switch (mode) {
         case 1:
-            patternsToRun[stripNumber] = (new FadingPattern(*selectedLED, r, g, b));
+            patternsToRun[stripNumber] = (fadingPattern);
+            // fadingPattern->init();
             break;
         case 2:
-            patternsToRun[stripNumber] = (new MovingPattern(*selectedLED, r, g, b));
-            selectedLED->testLED();
+            patternsToRun[stripNumber] = (movingPattern);
             break;
     }
+
+    // patternsToRun[stripNumber]->init();
+
+    // selectedLED->testLED();
+
 }
 
 int main() {
@@ -141,7 +151,7 @@ int main() {
     patternsToRun[0] = (new MovingPattern(rightLED, 255, 255, 255));
     patternsToRun[1] = (new FadingPattern(leftLED, 0, 0, 255));
     // patternsToRun.push_back(new WaitCommand(100));
-
+    
     run();
 }
 

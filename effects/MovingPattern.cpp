@@ -3,11 +3,12 @@
 
 MovingPattern::MovingPattern(LED& led, uint8_t r, uint8_t g, uint8_t b)
     : led(led), r(r), g(g), b(b), wait(50), ledCount(led.getNumOfLEDS()) {
+        init();
     }  
     
 void MovingPattern::init() {
     wait.reset();
-    led.setLED(0, 0, 0);
+    // led.setLED(0, 0, 0);
     counter = 0;
     incrementor = 1;
 }

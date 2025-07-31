@@ -4,8 +4,8 @@
 class PatternBase {
   
     public:
-        PatternBase();
-
+        PatternBase();            
+        virtual ~PatternBase();
         virtual void init() = 0;
         virtual void periodic() = 0;
         virtual bool isFinished() = 0;

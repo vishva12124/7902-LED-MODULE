@@ -3,6 +3,7 @@
 
 FlashingPattern::FlashingPattern(LED& led, uint8_t r, uint8_t g, uint8_t b)
     : led(led), r(r), g(g), b(b), wait(500) {
+        FlashingPattern::init();
     }  
     
 void FlashingPattern::init() {

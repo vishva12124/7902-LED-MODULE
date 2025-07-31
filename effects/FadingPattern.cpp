@@ -3,10 +3,15 @@
 
 FadingPattern::FadingPattern(LED& led, uint8_t r, uint8_t g, uint8_t b)
     : led(led), r(r), g(g), b(b), wait(3) {
+        led.testLED();
+        wait.reset();
+        // led.setLED(r, g, b);
+        // init();
     }  
     
 void FadingPattern::init() {
-    wait.reset();
+    // led.testLED();
+    wait.reset();    
     led.setLED(r, g, b);
 }
 

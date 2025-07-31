@@ -8,7 +8,8 @@
 LED::LED(PIO pio, uint sm, int pin, float freq, bool isRGBW, int NUM_PIXELS) :                                                                                                                                                                      
     NUM_PIXELS(NUM_PIXELS),
     pio(pio),
-    sm(sm) {
+    sm(sm),
+    turnLEDOn(true) {
     uint offset = pio_add_program(pio, &ws2812_program);
     // pio_claim_free_sm_and_add_program_for_gpio_range(&ws2812_program, &pio, &sm, &offset, pin, 1, true);
     // hard_assert(success);
@@ -22,7 +23,8 @@ int LED::getNumOfLEDS() {
 }
 
 void LED::testLED() {
-    gpio_put(25, true);
+    gpio_put(25, turnLEDOn);
+    turnLEDOn = !turnLEDOn;
 }
 
 void LED::setLED(uint8_t r, uint8_t g, uint8_t b) {
