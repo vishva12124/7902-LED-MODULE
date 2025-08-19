@@ -12,6 +12,7 @@ public:
     void periodic() override;
     bool isFinished() override;
     void end() override;
+    WaitCommand& getWaitCommand() override;
 
 private:
     LED& led;

@@ -1,10 +1,9 @@
 #ifndef WAITCOMMAND_HPP
 #define WAITCOMMAND_HPP
 
-#include "PatternBase.hpp"
 #include "LED.hpp"
 
-class WaitCommand : public PatternBase {
+class WaitCommand {
     public: 
         explicit WaitCommand(int64_t ms);
 

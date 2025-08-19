@@ -5,7 +5,12 @@ StaticPattern::StaticPattern(LED& led, uint8_t r, uint8_t g, uint8_t b):
     led(led),
     r(r),
     g(g),
-    b(b) {}
+    b(b),
+    wait(0) {}
+
+WaitCommand& StaticPattern::getWaitCommand() {
+    return wait;
+}
 
 void StaticPattern::init() {}
 void StaticPattern::periodic() {

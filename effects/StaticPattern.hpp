@@ -13,9 +13,11 @@ class StaticPattern : public PatternBase {
         void periodic();
         bool isFinished();
         void end();
+        WaitCommand& getWaitCommand() override;
 
     private:
         LED& led;
+        WaitCommand wait;
         const uint8_t r;
         const uint8_t g;
         const uint8_t b;    

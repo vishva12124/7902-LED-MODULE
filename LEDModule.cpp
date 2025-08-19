@@ -56,6 +56,8 @@ LED* selectedLED = nullptr;
 void run() {
     for (PatternBase* pattern: patternsToRun) {
         pattern->init();
+        WaitCommand wait = pattern->getWaitCommand();
+        wait.reset();
     }
 
     // leftLED.testLED();
@@ -66,7 +68,14 @@ void run() {
             if (pattern == nullptr) {
                 continue;
             }
-            pattern->periodic();
+
+            WaitCommand& wait = pattern->getWaitCommand();
+            wait.periodic();
+            bool timerDone = wait.isFinished();
+            if (timerDone) {
+                pattern->periodic();
+                wait.reset();
+            }
             // vectorSize = patternsToRun.size(); //debugging purposes
             if (pattern->isFinished()) {
                 // patternsToRun.erase(patternsToRun.begin() + (i - 1));
@@ -114,18 +123,26 @@ void getUserInput() {
 
     FadingPattern *fadingPattern = new FadingPattern(*selectedLED, r, g, b);
     MovingPattern *movingPattern = new MovingPattern(*selectedLED, r, g, b);
+    StaticPattern *staticPattern = new StaticPattern(*selectedLED, r, g, b);
+    FlashingPattern *flashingPattern = new FlashingPattern(*selectedLED, r, g, b);
+    RainbowPattern *rainbowPattern = new RainbowPattern(*selectedLED);
 
     switch (mode) {
         case 1:
-            patternsToRun[stripNumber] = (fadingPattern);
-            // fadingPattern->init();
+            patternsToRun[stripNumber] = (staticPattern);
             break;
         case 2:
-            patternsToRun[stripNumber] = (movingPattern);
+            patternsToRun[stripNumber] = (flashingPattern);
             break;
+        case 3:
+            patternsToRun[stripNumber] = (fadingPattern);
+            break;
+        case 4:
+            patternsToRun[stripNumber] = (movingPattern);
+            break;            
     }
 
-    // patternsToRun[stripNumber]->init();
+    patternsToRun[stripNumber]->init();
 
     // selectedLED->testLED();
 
@@ -137,12 +154,12 @@ int main() {
 
     // pll_deinit(pll_usb);
 
-    uart_init(UART_ID, BAUD_RATE);
-    gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
+    // uart_init(UART_ID, BAUD_RATE);
+    // gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
 
-    irq_set_exclusive_handler(UART1_IRQ, getUserInput);
-    irq_set_enabled(UART1_IRQ, true);
-    uart_set_irq_enables(UART_ID, true, false);  // RX IRQ only
+    // irq_set_exclusive_handler(UART1_IRQ, getUserInput);
+    // irq_set_enabled(UART1_IRQ, true);
+    // uart_set_irq_enables(UART_ID, true, false);  // RX IRQ only
 
     // patternsToRun.push_back(new FadingPattern(leftLED, 0, 0, 255));
     // // patternsToRun.push_back(new WaitCommand(100));

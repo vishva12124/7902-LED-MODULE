@@ -3,36 +3,31 @@
 
 FadingPattern::FadingPattern(LED& led, uint8_t r, uint8_t g, uint8_t b)
     : led(led), r(r), g(g), b(b), wait(3) {
-        led.testLED();
-        wait.reset();
-        // led.setLED(r, g, b);
-        // init();
     }  
-    
+ 
+WaitCommand& FadingPattern::getWaitCommand() {
+    return wait;
+}
+
+
 void FadingPattern::init() {
-    // led.testLED();
+    // led.testLED();d
     wait.reset();    
-    led.setLED(r, g, b);
+    // led.setLED(r, g, b);
 }
 
 void FadingPattern::periodic() {
-    wait.periodic();
+    uint8_t scaledR = (r * brightness) / 255;
+    uint8_t scaledG = (g * brightness) / 255;
+    uint8_t scaledB = (b * brightness) / 255;
+    brightness += fadeInterval;
 
-    bool timerDone = wait.isFinished();
+    led.setLED(scaledR, scaledG, scaledB);
 
-    if (timerDone) {
-        uint8_t scaledR = (r * brightness) / 255;
-        uint8_t scaledG = (g * brightness) / 255;
-        uint8_t scaledB = (b * brightness) / 255;
-        brightness += fadeInterval;
-
-        led.setLED(scaledR, scaledG, scaledB);
-
-        if (brightness <= 0 || brightness >= 255) {
-            fadeInterval = -fadeInterval;
-        }
-        wait.reset();
+    if (brightness <= 0 || brightness >= 255) {
+        fadeInterval = -fadeInterval;
     }
+    wait.reset();
 }
 
 bool FadingPattern::isFinished() {
