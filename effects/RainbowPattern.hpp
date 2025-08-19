@@ -15,11 +15,15 @@ public:
     WaitCommand& getWaitCommand() override;
 
 private:
+    struct RGB {
+        unsigned char r, g, b;
+    };
     LED& led;
     uint8_t r, g, b;
     WaitCommand wait;
     int brightness = 0;
     int fadeInterval = 1;
+    static RGB getWaveColor(float time, float phaseOffsetR, float phaseOffsetG, float phaseOffsetB);
 };
 
 #endif
