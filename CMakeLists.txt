@@ -64,7 +64,8 @@ pico_enable_stdio_usb(7902-LED-MODULE 1)
 
 # Add the standard library to the build
 target_link_libraries(7902-LED-MODULE
-        pico_stdlib)
+        pico_stdlib
+        pico_multicore)
 
 #set(PICO_DEFAULT_BINARY_TYPE no_flash)
 

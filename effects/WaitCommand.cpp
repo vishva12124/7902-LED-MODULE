@@ -10,12 +10,7 @@ void WaitCommand::init() {
 
 void WaitCommand::periodic() {
     int64_t elapsed = (time_us_64() / 1000) - startTime;
-
-    bool timePassed = elapsed >= waitTimeUs;
-
-    if (timePassed) {
-        finished = true;
-    }
+    finished = elapsed >= waitTimeUs;
 }
 
 void WaitCommand::reset() {

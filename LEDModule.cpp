@@ -15,6 +15,7 @@
 #include "hardware/clocks.h"
 #include "hardware/structs/pll.h"
 #include "hardware/structs/clocks.h"
+#include <pico/multicore.h>
 
 using namespace std;
 
@@ -43,6 +44,7 @@ uint8_t stripNumber = 0;
 uint8_t brightness = 0;
 uint8_t mode = 0;
 uint8_t RGB[3];
+uint8_t stripInfo[6];
 uint8_t r, g, b;
 
 static int vectorSize = 0; //debugging purposes
@@ -88,25 +90,52 @@ void run() {
 }
 
 void getUserInput() {
-    RGB[0] = RGB[1] = 0;
-    uart_read_blocking(UART_ID, &stripNumber, 1);
-    uart_read_blocking(UART_ID, &brightness, 1);
-    uart_read_blocking(UART_ID, &mode, 1);
-    uart_read_blocking(UART_ID, RGB, 2);
-    r = RGB[0] + RGB[1];
-    uart_read_blocking(UART_ID, RGB, 2);
-    g = RGB[0] + RGB[1];
-    uart_read_blocking(UART_ID, RGB, 2);
-    b = RGB[0] + RGB[1];
+    while (true) {
+        RGB[0] = RGB[1] = 0;
+        sleep_ms(1);
+        uart_read_blocking(UART_ID, &stripNumber, 1);
+        uart_read_blocking(UART_ID, &brightness, 1);
+        uart_read_blocking(UART_ID, &mode, 1);
+        uart_read_blocking(UART_ID, RGB, 2);
+        r = RGB[0] + RGB[1];
+        uart_read_blocking(UART_ID, RGB, 2);
+        g = RGB[0] + RGB[1];
+        uart_read_blocking(UART_ID, RGB, 2);
+        b = RGB[0] + RGB[1];
 
-    // sleep_ms(1);
+        // sleep_ms(1);
 
-    printf("\nSTRIP: %d\n", stripNumber);
-    printf("Mode: %d\n", mode);
-    printf("R: %d\n", r);
-    printf("G: %d\n", g);
-    printf("B: %d\n", b);
+        printf("\nSTRIP: %d\n", stripNumber);
+        printf("Brightness: %d\n", brightness);
+        printf("Mode: %d\n", mode);
+        printf("R: %d\n", r);
+        printf("G: %d\n", g);
+        printf("B: %d\n", b);
 
+        stripInfo[0] = stripNumber;
+        stripInfo[1] = brightness;
+        stripInfo[2] = mode;
+        stripInfo[3] = r;
+        stripInfo[4] = g;
+        stripInfo[5] = b;
+
+        multicore_fifo_push_blocking((uintptr_t)&stripInfo);
+    }
+}
+
+void updateLights() {
+    uintptr_t * data = (uintptr_t *) multicore_fifo_pop_blocking();
+    uint8_t* stripInfo = (uint8_t*) data;
+
+    uint8_t stripNumber = stripInfo[0];
+    uint8_t brightness = stripInfo[1];
+    uint8_t mode = stripInfo[2];
+    uint8_t r = stripInfo[3];
+    uint8_t g = stripInfo[4];
+    uint8_t b = stripInfo[5];
+
+    multicore_fifo_clear_irq();
+    
     switch (stripNumber) {
         case 0:
             selectedLED = &rightLED;
@@ -143,9 +172,7 @@ void getUserInput() {
     }
 
     patternsToRun[stripNumber]->init();
-
     // selectedLED->testLED();
-
 }
 
 int main() {
@@ -154,8 +181,12 @@ int main() {
 
     // pll_deinit(pll_usb);
 
-    // uart_init(UART_ID, BAUD_RATE);
-    // gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
+    multicore_launch_core1(getUserInput);
+    irq_set_exclusive_handler(SIO_FIFO_IRQ_NUM(0), updateLights);
+    irq_set_enabled(SIO_FIFO_IRQ_NUM(0), true);
+
+    uart_init(UART_ID, BAUD_RATE);
+    gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
 
     // irq_set_exclusive_handler(UART1_IRQ, getUserInput);
     // irq_set_enabled(UART1_IRQ, true);

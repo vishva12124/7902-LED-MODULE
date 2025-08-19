@@ -22,7 +22,6 @@ void FlashingPattern::periodic() {
         led.setLED(0, 0, 0);
     }
     isBlank = !isBlank;
-    wait.reset();
 }
 
 bool FlashingPattern::isFinished() {

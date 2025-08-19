@@ -17,6 +17,7 @@ class LEDModule {
         uint8_t brightness = 0;
         uint8_t mode = 0;
         uint8_t RGB[3];
+        uint8_t stripInfo[6];
         int vectorSize = 0; //debugging purposes
         bool irq_triggered = false;
         vector<PatternBase*> patternsToRun;

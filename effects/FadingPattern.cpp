@@ -27,7 +27,6 @@ void FadingPattern::periodic() {
     if (brightness <= 0 || brightness >= 255) {
         fadeInterval = -fadeInterval;
     }
-    wait.reset();
 }
 
 bool FadingPattern::isFinished() {
