@@ -148,28 +148,28 @@ void updateLights() {
         //     break;
     }
 
-    delete patternsToRun[stripNumber];
-
-    FadingPattern *fadingPattern = new FadingPattern(*selectedLED, r, g, b);
-    MovingPattern *movingPattern = new MovingPattern(*selectedLED, r, g, b);
-    StaticPattern *staticPattern = new StaticPattern(*selectedLED, r, g, b);
-    FlashingPattern *flashingPattern = new FlashingPattern(*selectedLED, r, g, b);
-    RainbowPattern *rainbowPattern = new RainbowPattern(*selectedLED);
+    PatternBase* newPattern = nullptr;
 
     switch (mode) {
         case 1:
-            patternsToRun[stripNumber] = (staticPattern);
+            newPattern = new StaticPattern(*selectedLED, r, g, b);
             break;
         case 2:
-            patternsToRun[stripNumber] = (flashingPattern);
+            newPattern = new FlashingPattern(*selectedLED, r, g, b);
             break;
         case 3:
-            patternsToRun[stripNumber] = (fadingPattern);
+            newPattern = new FadingPattern(*selectedLED, r, g, b);
             break;
         case 4:
-            patternsToRun[stripNumber] = (movingPattern);
-            break;            
+            newPattern = new MovingPattern(*selectedLED, r, g, b);
+            break;
+        case 5:
+            newPattern = new RainbowPattern(*selectedLED);
+            break;
     }
+
+    delete patternsToRun[stripNumber];
+    patternsToRun[stripNumber] = newPattern;
 
     patternsToRun[stripNumber]->init();
     // selectedLED->testLED();
