@@ -79,11 +79,11 @@ void run() {
                 wait.reset();
             }
             // vectorSize = patternsToRun.size(); //debugging purposes
-            if (pattern->isFinished()) {
-                // patternsToRun.erase(patternsToRun.begin() + (i - 1));
-                delete pattern;
-                patternsToRun[i] = nullptr;
-            }
+            // if (pattern->isFinished()) {
+            //     // patternsToRun.erase(patternsToRun.begin() + (i - 1));
+            //     delete pattern;
+            //     patternsToRun[i] = nullptr;
+            // }
             i++;
         }
     } 
