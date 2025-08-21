@@ -11,7 +11,7 @@ WaitCommand& FlashingPattern::getWaitCommand() {
 }    
 
 void FlashingPattern::init() {
-    wait.reset();
+    // wait.reset();
     // led.setLED(r, g, b);
 }
 

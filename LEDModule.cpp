@@ -40,12 +40,7 @@ PIO pio = pio0;
 uint sm1 = 0;
 uint sm2 = 1;
 
-uint8_t stripNumber = 0;
-uint8_t brightness = 0;
-uint8_t mode = 0;
 uint8_t RGB[3];
-uint8_t stripInfo[6];
-uint8_t r, g, b;
 
 static int vectorSize = 0; //debugging purposes
 
@@ -57,15 +52,18 @@ LED* selectedLED = nullptr;
 
 void run() {
     for (PatternBase* pattern: patternsToRun) {
-        pattern->init();
-        WaitCommand wait = pattern->getWaitCommand();
-        wait.reset();
+        if (pattern != nullptr) {
+            pattern->init();
+            WaitCommand wait = pattern->getWaitCommand();
+            wait.reset();
+        }
     }
+
+    leftLED.testLED();
 
     // leftLED.testLED();
 
     while (!irq_triggered) {
-        int i = 0;
         for (PatternBase* pattern : patternsToRun) {
             if (pattern == nullptr) {
                 continue;
@@ -84,8 +82,8 @@ void run() {
             //     delete pattern;
             //     patternsToRun[i] = nullptr;
             // }
-            i++;
         }
+        tight_loop_contents();
     } 
 }
 
@@ -93,46 +91,57 @@ void getUserInput() {
     while (true) {
         RGB[0] = RGB[1] = 0;
         sleep_ms(1);
+
+        uint8_t r,
+                g,
+                b,
+                stripNumber,
+                brightness,
+                mode;
+
         uart_read_blocking(UART_ID, &stripNumber, 1);
         uart_read_blocking(UART_ID, &brightness, 1);
         uart_read_blocking(UART_ID, &mode, 1);
         uart_read_blocking(UART_ID, RGB, 2);
         r = RGB[0] + RGB[1];
+
         uart_read_blocking(UART_ID, RGB, 2);
         g = RGB[0] + RGB[1];
         uart_read_blocking(UART_ID, RGB, 2);
         b = RGB[0] + RGB[1];
 
-        // sleep_ms(1);
+        uint32_t packedOne = 
+        ((uint32_t)stripNumber << 16) |
+        ((uint32_t)brightness << 8) |
+        ((uint32_t)mode);
 
-        printf("\nSTRIP: %d\n", stripNumber);
-        printf("Brightness: %d\n", brightness);
-        printf("Mode: %d\n", mode);
-        printf("R: %d\n", r);
-        printf("G: %d\n", g);
-        printf("B: %d\n", b);
+        uint32_t packedTwo =
+        ((uint32_t)r << 16) |
+        ((uint32_t)g << 8) |
+        (uint32_t)b;
 
-        stripInfo[0] = stripNumber;
-        stripInfo[1] = brightness;
-        stripInfo[2] = mode;
-        stripInfo[3] = r;
-        stripInfo[4] = g;
-        stripInfo[5] = b;
+        // printf("\nSTRIP: %d\n", stripNumber);
+        // printf("Brightness: %d\n", brightness);
+        // printf("Mode: %d\n", mode);
+        // printf("R: %d\n", r);
+        // printf("G: %d\n", g);
+        // printf("B: %d\n", b);
 
-        multicore_fifo_push_blocking((uintptr_t)&stripInfo);
+        multicore_fifo_push_blocking(packedOne);
+        multicore_fifo_push_blocking(packedTwo);
     }
 }
 
 void updateLights() {
-    uintptr_t * data = (uintptr_t *) multicore_fifo_pop_blocking();
-    uint8_t* stripInfo = (uint8_t*) data;
+    uint32_t unpackedOne = multicore_fifo_pop_blocking();
+    uint32_t unpackedTwo = multicore_fifo_pop_blocking();
 
-    uint8_t stripNumber = stripInfo[0];
-    uint8_t brightness = stripInfo[1];
-    uint8_t mode = stripInfo[2];
-    uint8_t r = stripInfo[3];
-    uint8_t g = stripInfo[4];
-    uint8_t b = stripInfo[5];
+    uint8_t stripNumber = (unpackedOne >> 16) & 0xFF;
+    uint8_t brightness = (unpackedOne >> 8) & 0xFF;
+    uint8_t mode = (unpackedOne) & 0xFF;
+    uint8_t r = (unpackedTwo >> 16) & 0xFF;
+    uint8_t g = (unpackedTwo >> 8)  & 0xFF;
+    uint8_t b = unpackedTwo & 0xFF;
 
     multicore_fifo_clear_irq();
     
@@ -172,6 +181,7 @@ void updateLights() {
     patternsToRun[stripNumber] = newPattern;
 
     patternsToRun[stripNumber]->init();
+    
     // selectedLED->testLED();
 }
 

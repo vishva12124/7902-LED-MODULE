@@ -21,7 +21,7 @@ RainbowPattern::RGB RainbowPattern::getWaveColor(float time, float phaseOffsetR,
 }
 
 void RainbowPattern::init() {
-    // led.setLED(r, g, b);
+    // led.setLED(0, 0, 0);
 }
 
 void RainbowPattern::periodic() {
