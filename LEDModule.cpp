@@ -45,38 +45,29 @@ LED rightLED(pio, sm2, STRIP_TWO_PIN, 800000, false, STRIP_TWO_LEDS);
 PatternBase* patterns[2];
 PatternBase* patternsToSchedule;
 bool newPatternIsScheduled = false;
+int patternIndex = 0;
 
 void run() {
     for (PatternBase* pattern: patterns) {
         if (pattern != nullptr) {
             pattern->init();
-            WaitCommand wait = pattern->getWaitCommand();
-            wait.reset();
+            pattern->getWaitCommand().reset();
         }
     }
 
     while (true) {
-        int i = 0;
-        for (PatternBase* pattern : patterns) {
-            // if (pattern == nullptr) {
-            //     leftLED.testLED();
-            //     continue;
-            // }
-
+        for (int i = 0; i != sizeof(patterns) / sizeof(patterns[0]); i++) {
             if (newPatternIsScheduled) {
-                int x = 0;
-                for (PatternBase* pattern : patterns) {
-                    if (pattern->isFinished()) {
-                        delete patterns[x];
-                        patterns[x] = patternsToSchedule;
-                        // delete patternsToSchedule;
-                        newPatternIsScheduled = false;
-                        break;
-                    }
-                    x++;
-                }
+                delete patterns[patternIndex];
+                patterns[patternIndex] = patternsToSchedule;
+
+                patterns[patternIndex]->init();
+                patterns[patternIndex]->getWaitCommand().reset();
+
+                newPatternIsScheduled = false;
             }
 
+            PatternBase* pattern = patterns[i];
             WaitCommand& wait = pattern->getWaitCommand();
             wait.periodic();
 
@@ -84,12 +75,6 @@ void run() {
                 pattern->periodic();
                 wait.reset();
             }
-
-            // if (pattern->isFinished()) {
-            //     delete pattern;
-            //     patternsToRun[i] = nullptr;
-            // }
-            i++;
         }
         tight_loop_contents();
     } 
@@ -104,6 +89,7 @@ void updateLights(uint8_t stripNumber, uint8_t brightness, uint8_t mode, uint8_t
 
     LED* selectedLED = nullptr;
     PatternBase* newPattern = nullptr;
+    patternIndex = stripNumber;
 
     switch (stripNumber) {
         case 0:
@@ -138,7 +124,7 @@ void updateLights(uint8_t stripNumber, uint8_t brightness, uint8_t mode, uint8_t
             break;
     }
     newPatternIsScheduled = true;
-    patterns[stripNumber]->end();
+    // patterns[stripNumber]->end();
 }
 
 void getUserInput() {
