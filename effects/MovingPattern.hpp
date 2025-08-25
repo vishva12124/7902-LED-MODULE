@@ -22,6 +22,7 @@ private:
     int brightness = 0;
     int counter = 0;
     int incrementor = 1;
+    bool finished = false;         
 };
 
 #endif

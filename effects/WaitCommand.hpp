@@ -16,7 +16,7 @@ class WaitCommand {
     private:
         int64_t waitTimeUs;
         absolute_time_t startTime;
-        bool finished;     
+        bool finished = false;     
 };
 
 #endif

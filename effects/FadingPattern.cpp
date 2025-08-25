@@ -30,7 +30,9 @@ void FadingPattern::periodic() {
 }
 
 bool FadingPattern::isFinished() {
-    return false;
+    return finished;
 }
 
-void FadingPattern::end() {}
+void FadingPattern::end() {
+    finished = true;
+}

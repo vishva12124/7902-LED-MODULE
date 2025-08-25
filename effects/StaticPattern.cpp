@@ -18,6 +18,8 @@ void StaticPattern::periodic() {
 }
 
 bool StaticPattern::isFinished() {
-    return true;
+    return finished;
 }
-void StaticPattern::end(){}
+void StaticPattern::end(){
+    finished = true;         
+}

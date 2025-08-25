@@ -19,6 +19,7 @@ private:
     const uint8_t r, g, b;
     bool isBlank = false;
     WaitCommand wait;
+    bool finished = false;         
 };
 
 #endif

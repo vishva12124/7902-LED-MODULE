@@ -20,6 +20,7 @@ private:
     WaitCommand wait;
     int brightness = 0;
     int fadeInterval = 1;
+    bool finished = false;         
 };
 
 #endif

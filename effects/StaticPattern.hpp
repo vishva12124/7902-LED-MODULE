@@ -20,7 +20,8 @@ class StaticPattern : public PatternBase {
         WaitCommand wait;
         const uint8_t r;
         const uint8_t g;
-        const uint8_t b;    
+        const uint8_t b;
+        bool finished = false;         
 };
 
 #endif

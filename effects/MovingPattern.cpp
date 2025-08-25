@@ -26,7 +26,9 @@ void MovingPattern::periodic() {
 }
 
 bool MovingPattern::isFinished() {
-    return false;
+    return finished;
 }
 
-void MovingPattern::end() {}
+void MovingPattern::end() {
+    finished = true;
+}

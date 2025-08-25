@@ -25,7 +25,9 @@ void FlashingPattern::periodic() {
 }
 
 bool FlashingPattern::isFinished() {
-    return false;
+    return finished;
 }
 
-void FlashingPattern::end() {}
+void FlashingPattern::end() {
+    finished = true;
+}

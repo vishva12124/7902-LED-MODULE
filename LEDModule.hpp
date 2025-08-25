@@ -6,21 +6,15 @@ using namespace std;
 
 class LEDModule {
     public:
-        void run(LED led);
+        void run();
         void getUserInput();
         int main();
+        void updateLights();
+        inline uint8_t toUnsigned(int8_t value);
 
     private:
         LED rightLED;
         LED leftLED;
-        uint8_t stripNumber = 0;
-        uint8_t brightness = 0;
-        uint8_t mode = 0;
-        uint8_t RGB[3];
-        uint8_t stripInfo[6];
-        int vectorSize = 0; //debugging purposes
-        bool irq_triggered = false;
-        vector<PatternBase*> patternsToRun;
 };
 
 

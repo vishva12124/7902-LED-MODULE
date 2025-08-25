@@ -23,6 +23,7 @@ private:
     WaitCommand wait;
     int brightness = 0;
     int fadeInterval = 1;
+    bool finished = false;         
     static RGB getWaveColor(float time, float phaseOffsetR, float phaseOffsetG, float phaseOffsetB);
 };
 

@@ -31,7 +31,9 @@ void RainbowPattern::periodic() {
 }
 
 bool RainbowPattern::isFinished() {
-    return false;
+    return finished;
 }
 
-void RainbowPattern::end() {}
+void RainbowPattern::end() {
+    finished = true;
+}
