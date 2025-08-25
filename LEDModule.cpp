@@ -63,10 +63,10 @@ void run() {
                 newPatternIsScheduled = false;
             }
             PatternBase* pattern = patterns[i];
-            WaitCommand& wait = pattern->getWaitCommand();
-            wait.periodic();
 
             if (!pattern->isFinished()) {
+                WaitCommand& wait = pattern->getWaitCommand();
+                wait.periodic();
                 if (wait.isFinished()) {
                     pattern->periodic();
                     wait.reset();
