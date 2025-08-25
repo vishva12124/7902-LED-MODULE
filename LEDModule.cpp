@@ -87,8 +87,8 @@ inline uint8_t toUnsigned(int8_t value) {
 
 void updateLights(uint8_t stripNumber, uint8_t brightness, uint8_t mode, uint8_t r, uint8_t g, uint8_t b) {
 
-    LED* selectedLED = nullptr;
-    PatternBase* newPattern = nullptr;
+    LED* selectedLED;
+    PatternBase* newPattern;
     patternIndex = stripNumber;
 
     switch (stripNumber) {
@@ -102,6 +102,10 @@ void updateLights(uint8_t stripNumber, uint8_t brightness, uint8_t mode, uint8_t
             selectedLED = &rightLED;
             break;
     }
+
+    r = (r * brightness) / 255;
+    g = (g * brightness) / 255;
+    b = (b * brightness) / 255;
 
     switch (mode) {
         case 1:
@@ -124,7 +128,6 @@ void updateLights(uint8_t stripNumber, uint8_t brightness, uint8_t mode, uint8_t
             break;
     }
     newPatternIsScheduled = true;
-    // patterns[stripNumber]->end();
 }
 
 void getUserInput() {
