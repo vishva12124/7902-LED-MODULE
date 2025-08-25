@@ -35,12 +35,8 @@ using namespace std;
 #define STRIP_ONE_LEDS 8
 #define STRIP_TWO_LEDS 20
 
-PIO pio = pio0;
-uint sm1 = 0;
-uint sm2 = 1;
-
-LED leftLED(pio, sm1, STRIP_ONE_PIN, 800000, false, STRIP_ONE_LEDS);
-LED rightLED(pio, sm2, STRIP_TWO_PIN, 800000, false, STRIP_TWO_LEDS);
+LED leftLED(STRIP_ONE_PIN, STRIP_ONE_LEDS);
+LED rightLED(STRIP_TWO_PIN, STRIP_TWO_LEDS);
 
 PatternBase* patterns[2];
 PatternBase* patternsToSchedule;
@@ -66,14 +62,15 @@ void run() {
 
                 newPatternIsScheduled = false;
             }
-
             PatternBase* pattern = patterns[i];
             WaitCommand& wait = pattern->getWaitCommand();
             wait.periodic();
 
-            if (wait.isFinished()) {
-                pattern->periodic();
-                wait.reset();
+            if (!pattern->isFinished()) {
+                if (wait.isFinished()) {
+                    pattern->periodic();
+                    wait.reset();
+                }
             }
         }
         tight_loop_contents();

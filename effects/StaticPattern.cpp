@@ -15,6 +15,7 @@ WaitCommand& StaticPattern::getWaitCommand() {
 void StaticPattern::init() {}
 void StaticPattern::periodic() {
     led.setLED(r, g, b);
+    end();
 }
 
 bool StaticPattern::isFinished() {
