@@ -5,14 +5,40 @@
 #include "LED.hpp" 
 
 
-LED::LED(PIO pio, uint sm, int pin, float freq, bool isRGBW, int NUM_PIXELS) :                                                                                                                                                                      
+LED::LED(int pin, int NUM_PIXELS, float freq, bool isRGBW) :
     NUM_PIXELS(NUM_PIXELS),
-    pio(pio),
-    sm(sm),
     turnLEDOn(true) {
+        init(pin, freq, isRGBW);
+}
+
+LED::LED(int pin, int NUM_PIXELS, float freq) :
+    NUM_PIXELS(NUM_PIXELS),
+    turnLEDOn(true) {
+        init(pin, freq);
+}
+
+LED::LED(int pin, int NUM_PIXELS, bool isRGBW) :
+    NUM_PIXELS(NUM_PIXELS),
+    turnLEDOn(true) {
+        init(pin, 800000, isRGBW);
+}
+
+LED::LED(int pin, int NUM_PIXELS) :
+    NUM_PIXELS(NUM_PIXELS),
+    turnLEDOn(true) {
+        init(pin);
+}
+
+void LED::init(uint pin, float freq, bool isRGBW) {
+    pio = pio0;
+    sm = pio_claim_unused_sm(pio, false);
+
+    if (sm < 0) {
+        pio = pio1;
+        sm = pio_claim_unused_sm(pio, false);
+    }
+
     uint offset = pio_add_program(pio, &ws2812_program);
-    // pio_claim_free_sm_and_add_program_for_gpio_range(&ws2812_program, &pio, &sm, &offset, pin, 1, true);
-    // hard_assert(success);
     ws2812_program_init(pio, sm, offset, pin, freq, isRGBW);
     gpio_init(25);
     gpio_set_dir(25, GPIO_OUT);
