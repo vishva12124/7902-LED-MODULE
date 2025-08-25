@@ -35,11 +35,21 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-include_directories(LEDModule)
+add_compile_definitions(PICO_STDIO_USB_ENABLE_RESET_VIA_VENDOR_INTERFACE=1)
+
+include_directories(effects)
 
 add_executable(7902-LED-MODULE 
-7902-LED-MODULE.cpp
-LEDModule/LEDModule.cpp)
+LEDModule.cpp
+LED.cpp
+effects/WaitCommand.cpp
+effects/FlashingPattern.cpp
+effects/PatternBase.cpp
+effects/StaticPattern.cpp
+effects/FadingPattern.cpp
+effects/RainbowPattern.cpp
+effects/MovingPattern.cpp
+)
 
 
 pico_set_program_name(7902-LED-MODULE "7902-LED-MODULE")
@@ -54,7 +64,15 @@ pico_enable_stdio_usb(7902-LED-MODULE 1)
 
 # Add the standard library to the build
 target_link_libraries(7902-LED-MODULE
-        pico_stdlib)
+        pico_stdlib
+        pico_multicore
+        hardware_watchdog)
+
+#set(PICO_DEFAULT_BINARY_TYPE no_flash)
+
+set(CMAKE_BUILD_TYPE "Debug")
+#set(CMAKE_C_FLAGS_DEBUG "-g -O0")
+#set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 
 # Add the standard include files to the build
 target_include_directories(7902-LED-MODULE PRIVATE
