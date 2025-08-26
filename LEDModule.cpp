@@ -16,6 +16,7 @@
 #include "hardware/clocks.h"
 #include "hardware/structs/pll.h"
 #include "hardware/structs/clocks.h"
+#include "hardware/watchdog.h"
 #include <pico/multicore.h>
 
 using namespace std;
@@ -74,6 +75,7 @@ void run() {
             }
         }
         tight_loop_contents();
+        watchdog_update();
     } 
 }
 
@@ -153,18 +155,12 @@ void getUserInput() {
 
 int main() {
     stdio_init_all();
-
-    // pll_deinit(pll_usb);
-
-    // sleep_ms(1);
-
+    pll_deinit(pll_usb);
     multicore_launch_core1(getUserInput);
-    // irq_set_exclusive_handler(SIO_FIFO_IRQ_NUM(0), updateLights);
-    // irq_set_enabled(SIO_FIFO_IRQ_NUM(0), true);
-
     uart_init(UART_ID, BAUD_RATE);
     gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
-
+    watchdog_enable(100, 1);
+    
     patterns[0] = (new MovingPattern(rightLED, 255, 255, 255));
     patterns[1] = (new FadingPattern(leftLED, 0, 0, 255));
 
